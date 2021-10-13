@@ -1,0 +1,146 @@
+:root {
+  --color-black: #000000;
+  --color-btn: #fff0acda;
+  --button-size: 50px;
+  --color-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  /* background-color: var(--color-black); */
+  margin: 0;
+  text-align: center;
+}
+
+button {
+  border: 3px solid var(--color-black);
+  border-radius: 10px;
+  outline: none;
+  position: relative;
+  margin: 4px auto 0 auto;
+}
+
+.game {
+  width: 640px;
+  height: 400px;
+  background: url("/img/background.png") no-repeat;
+  background-size: cover; 
+  background-position: 50% 50%;
+  border-radius: 20px;
+  margin: auto;
+  position: relative;
+  top: 50px;
+}
+
+/* .game_backroundImg {
+  width: 50%;
+  border-radius: 20px;
+  position: relative;
+  transform: translate(50% ,50%);
+  z-index: -1;
+} */
+
+.displayContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 50%;
+}
+
+.playBtn {
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: var(--color-btn);
+}
+
+.playBtn:hover {
+  cursor: pointer;
+}
+
+.fa-play,
+.fa-stop {
+  backface-visibility: hidden;
+  display: block;
+}
+
+.playBtn .fa-play {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+  font-size: 25px;
+}
+
+[data-show="playBtn"] .fa-play {
+  transform: rotateY(0deg);
+}
+
+[data-show="playBtn"] .fa-stop {
+  transform: rotateY(180deg);
+}
+
+[data-show="stopBtn"] .fa-play {
+  transform: rotateY(180deg);
+}
+
+[data-show="stopBtn"] .fa-stop {
+  transform: rotateY(0deg);
+}
+
+.playBtn .fa-stop {
+  pointer-events: none;
+  opacity: 1;
+  font-size: 25px;
+}
+
+.timer {
+  width: calc(var(--button-size) * 2);
+  height: 40px;
+  font-size: 20px;
+}
+
+.counter {
+  margin-top: 4px;
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: tomato;
+  border-radius: 50%;
+  border: 2px solid var(--color-black);
+  line-height: 45px;
+  font-size: 32px;
+  color: var(--color-white);
+}
+
+.winOrLose {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 55%;
+  height: 25%;
+  position: relative;
+  top: 40px;
+  border-radius: 20px;
+  opacity: 0;
+}
+
+.reDo {
+  opacity: 1.0;
+  width: var(--button-size);
+  height: var(--button-size);
+  background-color: var(--color-btn);
+  border: 2px solid var(--color-black);
+}
+
+.reDo .fas {
+  font-size: 20px;
+  color: var(--color-black);
+}
+
+.state {
+  font-size: 30px;
+  color: var(--color-white);
+}
