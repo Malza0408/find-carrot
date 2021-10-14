@@ -26,7 +26,7 @@ button {
 .game {
   width: 640px;
   height: 400px;
-  background: url("/img/background.png") no-repeat;
+  background: url("../img/background.png") no-repeat;
   background-size: cover; 
   background-position: 50% 50%;
   border-radius: 20px;
