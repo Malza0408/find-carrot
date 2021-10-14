@@ -9,6 +9,7 @@ const field = document.querySelector('.field');
 const counter = document.querySelector('.counter');
 const fieldRect = field.getBoundingClientRect();
 
+const CARROT_SIZE = 80;
 const defaultTime = 10;
 const PLAYBUTTON = "playBtn";
 const STOPBUTTON = "stopBtn";
@@ -34,8 +35,8 @@ for (let i = 0; i < 10; i++) {
 }
 
 function makeRandomPisition() {
-  let X = Math.floor(Math.random() * (fieldRect.right - fieldRect.x));
-  let Y = Math.floor(Math.random() * (fieldRect.bottom - fieldRect.y));
+  let X = Math.floor(Math.random() * (fieldRect.right - CARROT_SIZE - fieldRect.x));
+  let Y = Math.floor(Math.random() * (fieldRect.bottom - CARROT_SIZE - fieldRect.y));
 
   return {
     X,

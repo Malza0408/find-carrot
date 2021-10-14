@@ -121,11 +121,10 @@ button {
 
 .field {
   position: absolute;
-  width: 80%;
+  width: 100%;
   top: 210px;
-  left: 64px;
-  height: 110px;
-  /* background-color: red; */
+  height: 190px;
+  background-color: red;
   /* opacity: 0.4; */
 }
 
