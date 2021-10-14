@@ -43,10 +43,14 @@ function makeRandomPisition() {
   }
 }
 
-function imgsReInit() {
+function imgsSetHidden(isHidden) {
   imgsArr.forEach(img => {
-    img.style.opacity = 1;
-    img.classList.remove('hidden');
+    if (isHidden) {
+      img.classList.add('hidden');  
+    } else {
+      img.style.opacity = 1;
+      img.classList.remove('hidden');
+    }    
   })
 }
 
@@ -83,7 +87,7 @@ reDoBtn.addEventListener('click', (event) => {
   playGame();
   setDisplayOpacity(0);
   rePositionElements();
-  imgsReInit();
+  imgsSetHidden(false);
   countCarrot = 10;
   counter.innerText = `${countCarrot}`;
 })
@@ -116,6 +120,7 @@ function restartGame(notice) {
   clearInterval(id);
   setState(notice);
   field.classList.remove(SHOW);
+  imgsSetHidden(true);
 }
 
 function setPlayBtnDisabled(isDisabled, show) {
