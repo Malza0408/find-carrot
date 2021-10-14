@@ -13,7 +13,6 @@ body {
   height: 100vh;
   /* background-color: var(--color-black); */
   margin: 0;
-  text-align: center;
 }
 
 button {
@@ -49,6 +48,7 @@ button {
   flex-direction: column;
   align-items: center;
   height: 50%;
+  text-align: center;
 }
 
 .playBtn {
@@ -59,6 +59,11 @@ button {
 
 .playBtn:hover {
   cursor: pointer;
+  
+}
+
+.playBtn.disabled {
+  pointer-events: none;
 }
 
 .fa-play,
@@ -114,6 +119,29 @@ button {
   color: var(--color-white);
 }
 
+.field {
+  position: absolute;
+  width: 80%;
+  top: 210px;
+  left: 64px;
+  height: 110px;
+  /* background-color: red; */
+  /* opacity: 0.4; */
+}
+
+.field img {
+  position: absolute;
+  display: inline;
+}
+
+.field.show img:hover {
+  cursor: pointer;
+}
+
+img.hidden {
+  pointer-events: none;
+}
+
 .winOrLose {
   margin: auto;
   display: flex;
@@ -125,6 +153,8 @@ button {
   top: 40px;
   border-radius: 20px;
   opacity: 0;
+  text-align: center;
+  pointer-events: none;
 }
 
 .reDo {
@@ -135,9 +165,18 @@ button {
   border: 2px solid var(--color-black);
 }
 
+.winOrLose.show {
+  pointer-events: auto;
+}
+
+.winOrLose.show .reDo:hover {
+  cursor: pointer;  
+}
+
 .reDo .fas {
   font-size: 20px;
   color: var(--color-black);
+  pointer-events: none;
 }
 
 .state {

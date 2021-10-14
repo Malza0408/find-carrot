@@ -3,20 +3,89 @@ const playFont = playBtn.querySelector('.fas.fa-play');
 const stopFont = playBtn.querySelector('.fas.fa-stop');
 const timer = document.querySelector('.timer');
 const displayState = document.querySelector('.winOrLose');
+const reDoBtn = displayState.querySelector('.reDo');
 const state = displayState.querySelector('.state');
+const field = document.querySelector('.field');
+const counter = document.querySelector('.counter');
+const fieldRect = field.getBoundingClientRect();
 
-const defaultTime = 2;
+const defaultTime = 10;
+const PLAYBUTTON = "playBtn";
+const STOPBUTTON = "stopBtn";
+const SHOW = "show";
+const CARROT = "carrot";
+const BUG = "bug";
+const imgsArr = [];
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+for (let i = 0; i < 10; i++) {
+  const carrot = makeElements(CARROT);
+  field.appendChild(carrot);
+  const bug = makeElements(BUG);
+  field.appendChild(bug);
+}
 
 let id;
 
+function makeRandomPisition() {
+  let X = Math.floor(Math.random() * (fieldRect.right - fieldRect.x));
+  let Y = Math.floor(Math.random() * (fieldRect.bottom - fieldRect.y));
+
+  return {
+    X,
+    Y
+  }
+}
+
+function imgsReInit() {
+  imgsArr.forEach(img => {
+    img.style.opacity = 1;
+    img.classList.remove('hidden');
+  })
+}
+
+function makeElements(element) {
+  const { X, Y } = makeRandomPisition();
+  const child = document.createElement('img');
+  const id = uuidv4();
+  child.src = `./img/${element}.png`;
+  child.setAttribute('class', element);
+  child.setAttribute('data-id', id);
+  child.style.transform = `translate(${X}px,${Y}px)`;
+  field.style.opacity = 0;
+  imgsArr.push(child);
+  return child;
+}
+
+function rePositionElements() {
+  const imgs = [].slice.call(field.children);
+  imgs.forEach(img => {
+    const { X, Y } = makeRandomPisition();
+    img.style.transform = `translate(${X}px,${Y}px)`;
+  });
+}
+
 playBtn.addEventListener('click', (event) => {
-  if (event.target.dataset.show === 'playBtn') {
-    event.target.dataset.show = 'stopBtn';
+  if (event.target.dataset.show === PLAYBUTTON) {    
     playGame();
   } else {
-    event.target.dataset.show = 'playBtn';
-    replayGame();
+    restartGame("Replay?");
   }
+})
+
+reDoBtn.addEventListener('click', (event) => {
+  playGame();
+  setDisplayOpacity(0);
+  rePositionElements();
+  imgsReInit();
+  countCarrot = 10;
+  counter.innerText = `${countCarrot}`;
 })
 
 function setTimer(number) {
@@ -29,28 +98,71 @@ function updateTime(number) {
     setTimer(number);
     number--;
     if (number < 0) {
-      clearInterval(id);
-      failGame();
+      restartGame("YOU LOST~");
     }
   }, 1000);
 }
 
-function playGame() {
+function playGame() {  
+  setPlayBtnDisabled(false, STOPBUTTON);  
   updateTime(defaultTime);
-}
-
-function replayGame() {
-  clearInterval(id);
   setTimer(defaultTime);
-  setState('Replay?')
+  displayState.classList.remove(SHOW);
+  setFieldOpacity();
 }
 
-function failGame() {
+function restartGame(notice) {
+  setPlayBtnDisabled(true, PLAYBUTTON);  
   clearInterval(id);
-  setState('YOU LOST~');
+  setState(notice);
+  field.classList.remove(SHOW);
+}
+
+function setPlayBtnDisabled(isDisabled, show) {
+  if (isDisabled) {
+    playBtn.classList.add('disabled');
+    playBtn.dataset.show = show;
+    playBtn.style.opacity = 0;
+  } else {    
+    playBtn.classList.remove('disabled');
+    playBtn.dataset.show = show;
+    playBtn.style.opacity = 1;
+  }
 }
 
 function setState(sentence) {
-  displayState.style.opacity = 1;
+  displayState.classList.add(SHOW);
+  setDisplayOpacity(1);
   state.innerText = `${sentence}`;
 }
+
+function setDisplayOpacity(number) {
+  displayState.style.opacity = number;
+}
+
+function setFieldOpacity() {
+  field.style.opacity = 0;
+  setTimeout(() => {
+    field.classList.add(SHOW);
+    field.style.opacity = 1;
+  }, 1000);
+}
+
+let countCarrot = 10;
+field.addEventListener('click', (event) => {
+  const id = event.target.dataset.id;
+  const className = event.target.className;
+  if (id && className === CARROT) {
+    const hiddenImg = field.querySelector(`img[data-id="${id}"]`);
+    hiddenImg.style.opacity = 0;
+    hiddenImg.classList.add('hidden');
+    countCarrot--;
+    counter.innerText = `${countCarrot}`;
+  }
+  else if (id && className === BUG) {
+    restartGame("YOU LOST~");
+  }
+  if (countCarrot === 0) {
+    restartGame("YOU WIN!!");
+  }
+})
