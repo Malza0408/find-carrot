@@ -179,10 +179,10 @@ field.addEventListener('click', (event) => {
     target.classList.add('hidden');
     countCarrot--;
     counter.innerText = `${countCarrot}`;
-    playAudio(carrotSound);
+    playAudio(carrotSound, 1);
     if (countCarrot === 0) {
       restartGame("YOU WIN!!");
-      playAudio(winSound, 0.2);
+      playAudio(winSound, 0.4);
     }
   }
   else if (target.matches('.bug')) {
@@ -191,7 +191,7 @@ field.addEventListener('click', (event) => {
   }
 })
 
-function playAudio(audio, volume = 0.1) {
+function playAudio(audio, volume = 0.5) {
   audio.currentTime = 0;
   audio.volume = volume;
   audio.play();
