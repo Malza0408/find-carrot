@@ -11,7 +11,6 @@
 
 body {
   height: 100vh;
-  /* background-color: var(--color-black); */
   margin: 0;
 }
 
@@ -26,24 +25,14 @@ button {
 .game {
   width: 640px;
   height: 400px;
-  background: url("../img/background.png") no-repeat;
-  background-size: cover; 
-  background-position: 50% 50%;
+  background: url("../img/background.png") center/cover no-repeat;
   border-radius: 20px;
   margin: auto;
   position: relative;
   top: 50px;
 }
 
-/* .game_backroundImg {
-  width: 50%;
-  border-radius: 20px;
-  position: relative;
-  transform: translate(50% ,50%);
-  z-index: -1;
-} */
-
-.displayContainer {
+.game__displayContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,18 +40,17 @@ button {
   text-align: center;
 }
 
-.playBtn {
+.game__playBtn {
   width: var(--button-size);
   height: var(--button-size);
   background-color: var(--color-btn);
 }
 
-.playBtn:hover {
-  cursor: pointer;
-  
+.game__playBtn:hover {
+  cursor: pointer;  
 }
 
-.playBtn.disabled {
+.game__playBtn.disabled {
   pointer-events: none;
 }
 
@@ -72,7 +60,7 @@ button {
   display: block;
 }
 
-.playBtn .fa-play {
+.game__playBtn .fa-play {
   position: absolute;
   left: 12px;
   pointer-events: none;
@@ -95,7 +83,7 @@ button {
   transform: rotateY(0deg);
 }
 
-.playBtn .fa-stop {
+.game__playBtn .fa-stop {
   pointer-events: none;
   opacity: 1;
   font-size: 25px;
@@ -124,24 +112,24 @@ button {
   width: 100%;
   top: 210px;
   height: 190px;
-  background-color: red;
-  /* opacity: 0.4; */
 }
+
 
 .field img {
   position: absolute;
-  display: inline;
+  transition: all 100ms ease-in;
 }
 
 .field.show img:hover {
   cursor: pointer;
+  transform: scale(1.1);
 }
 
 img.hidden {
   pointer-events: none;
 }
 
-.winOrLose {
+.popUpMenu {
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -164,11 +152,11 @@ img.hidden {
   border: 2px solid var(--color-black);
 }
 
-.winOrLose.show {
+.popUpMenu.show {
   pointer-events: auto;
 }
 
-.winOrLose.show .reDo:hover {
+.popUpMenu.show .reDo:hover {
   cursor: pointer;  
 }
 
