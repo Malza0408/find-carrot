@@ -1,12 +1,13 @@
 'use strict';
+import PopUp from './popup.js';
 
 const playBtn = document.querySelector('.game__playBtn');
 const playFont = playBtn.querySelector('.fas.fa-play');
 const stopFont = playBtn.querySelector('.fas.fa-stop');
 const timer = document.querySelector('.timer');
-const popUpMenu = document.querySelector('.popUpMenu');
-const reDoBtn = popUpMenu.querySelector('.reDo');
-const state = popUpMenu.querySelector('.state');
+// const popUpMenu = document.querySelector('.popUpMenu');
+// const restartBtn = popUpMenu.querySelector('.popUpMenu__restart');
+// const popUpMenuText = popUpMenu.querySelector('.popUpMenu__text');
 const field = document.querySelector('.field');
 const counter = document.querySelector('.counter');
 const fieldRect = field.getBoundingClientRect();
@@ -28,6 +29,15 @@ const imgsArr = [];
 
 let id;
 
+const gameFinishPopUp = new PopUp();
+gameFinishPopUp.setClickListener(() => {
+  playGame();
+  rePositionImgs();
+  setImgsHidden(false);
+  countCarrot = 10;
+  counter.innerText = `${countCarrot}`;
+  stopAudio(winSound);
+})
 
 function makeElements(element) {
   const { X, Y } = makeRandomPisition();
@@ -68,8 +78,10 @@ function setImgsHidden(isHidden) {
     if (isHidden) {
       img.classList.add('hidden');  
     } else {
-      img.style.opacity = 1;
-      img.classList.remove('hidden');
+      setTimeout(() => {
+        img.style.opacity = 1;
+        img.classList.remove('hidden');
+      }, 1000);
     }    
   })
 }
@@ -87,18 +99,8 @@ playBtn.addEventListener('click', (event) => {
   if (event.target.dataset.show === PLAYBUTTON) {    
     playGame();
   } else {
-    restartGame("Replay?");
+    finishGame("Replay?");
   }
-})
-
-reDoBtn.addEventListener('click', (event) => {
-  playGame();
-  setPopUpMenu(0);
-  rePositionImgs();
-  setImgsHidden(false);
-  countCarrot = 10;
-  counter.innerText = `${countCarrot}`;
-  stopAudio(winSound);
 })
 
 function setTimer(number) {
@@ -111,7 +113,7 @@ function updateTime(number) {
     setTimer(number);
     number--;
     if (number < 0) {      
-      restartGame("YOU LOST~");
+      finishGame("YOU LOST~");
       playAudio(bugSound);
     }
   }, 1000);
@@ -122,15 +124,14 @@ function playGame() {
   updateTime(defaultTime);
   setTimer(defaultTime);
   setImgsHidden(false);
-  setPopUpMenu(false, 0);
   setField(true);
   playAudio(bgSound);
 }
 
-function restartGame(notice) {
+function finishGame(notice) {
   setPlayBtnDisabled(true, PLAYBUTTON);  
   clearInterval(id);
-  setState(notice);
+  gameFinishPopUp.setState(notice);
   setField(false);
   setImgsHidden(true);
   stopAudio(bgSound);
@@ -146,17 +147,6 @@ function setPlayBtnDisabled(isDisabled, show) {
     playBtn.dataset.show = show;
     playBtn.style.opacity = 1;
   }
-}
-
-function setState(sentence) {
-  setPopUpMenu(true, 1);
-  state.innerText = `${sentence}`;
-  playAudio(alertSound);
-}
-
-function setPopUpMenu(isShow, opacity) {
-  isShow ? popUpMenu.classList.add(SHOW) : popUpMenu.classList.remove(SHOW);
-  popUpMenu.style.opacity = opacity;
 }
 
 function setField(isShow) {
@@ -181,12 +171,12 @@ field.addEventListener('click', (event) => {
     counter.innerText = `${countCarrot}`;
     playAudio(carrotSound, 1);
     if (countCarrot === 0) {
-      restartGame("YOU WIN!!");
+      finishGame("YOU WIN!!");
       playAudio(winSound, 0.4);
     }
   }
   else if (target.matches('.bug')) {
-    restartGame("YOU LOST~");
+    finishGame("YOU LOST~");
     playAudio(bugSound);
   }
 })
@@ -195,7 +185,6 @@ function playAudio(audio, volume = 0.5) {
   audio.currentTime = 0;
   audio.volume = volume;
   audio.play();
-  console.log(audio.volume)
 }
 
 function stopAudio(audio) {
