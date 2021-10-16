@@ -1,5 +1,4 @@
 'use strict';
-
 const CARROT_SIZE = 80;
 
 export default class Field {
@@ -36,7 +35,6 @@ export default class Field {
     }
   }
   
-
   setOpacity(opacity) {
     this.field.style.opacity = opacity;
   }
@@ -56,7 +54,6 @@ export default class Field {
       this.onItemClick && this.onItemClick('bug');
     }
   }
-
 
   rePositionImgs() {
     const imgs = [].slice.call(this.field.children);

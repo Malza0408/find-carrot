@@ -1,4 +1,5 @@
 'use strict';
+import * as sound from './sound.js';
 
 export default class PopUp {
   constructor() {
@@ -9,6 +10,7 @@ export default class PopUp {
     this.restartBtn.addEventListener('click', (event) => {
       this.onClick && this.onClick();
       this.hide(false, 0);
+      sound.stopWin();
     });
 
     this.SHOW = "show";
@@ -26,6 +28,5 @@ export default class PopUp {
   setState(sentence) {
     this.hide(true, 1);
     this.popUpMenuText.innerText = `${sentence}`;
-    // playAudio(alertSound);
   }
 }
