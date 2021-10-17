@@ -1,25 +1,63 @@
 'use strict';
 import * as sound from './sound.js';
-import Field from './field.js';
+import { Field, ItemType } from './field.js';
 
 const PLAYBUTTON = "playBtn";
 const STOPBUTTON = "stopBtn";
-const CARROT = "carrot";
-const BUG = "bug";
 
-export default class Game {
-  constructor() {
+// 문자열 보장
+export const Notice = Object.freeze({
+  win: '🥕Play Next Level❗',
+  lose: '💩YOU LOST~😂',
+  replay: 'Replay❓🤔',
+  nextLevel: 'play Next Level❓'
+})
+
+
+export class GameBuilder {
+  gameDuration(duration) {
+    this.gameDuration = duration;
+    return this;
+  }
+
+  carrotCount(num) {
+    this.carrotCount = num;
+    return this;
+  }
+
+  bugCount(num) {
+    this.bugCount = num;
+    return this;
+  }
+
+  build() {
+    return new Game(
+      this.gameDuration,
+      this.carrotCount,
+      this.bugCount
+    );
+  }
+}
+
+class Game {
+  constructor(duration, carrotCount, bugCount) {
     this.playBtn = document.querySelector('.game__playBtn');
     this.timer = document.querySelector('.timer');
     this.counter = document.querySelector('.counter');
-    this.gameField = new Field(10, 10);
+    this.level = document.querySelector('.game__Level');
+    this.levelText = this.level.querySelector('.level');
+    this.gameField = new Field();
     this.gameField.setClickListener(this.onItemClick);
     this.id;
     this.gameStart = false;
-    this.countCarrot = 10;
-    this.defaultTime = 10;
-    this.defaultCountCarrot = 10;
-    this.defaultCountBug = 10;
+    this.carrotCount = carrotCount;
+    this.defaultTime = duration;
+    this.saveCarrotCount = carrotCount;
+    this.saveBugCount = bugCount;
+    this.defaultCarrotCount = carrotCount;
+    this.defaultBugCount = bugCount;
+    this.highestLevel = 1;
+    this.curLevel = 1;
 
     this.playBtn.addEventListener('click', (event) => {
       if (event.target.dataset.show === PLAYBUTTON) {
@@ -27,31 +65,33 @@ export default class Game {
         this.playGame();
       } else {
         sound.playAlert();
-        this.finishGame("Replay?");
+        this.finishGame(Notice.replay);
       }
     })
   }
 
   onItemClick = (item) => {
-    if (item === CARROT) {
-      this.countCarrot--;
+    if (item === ItemType.carrot) {
+      this.carrotCount--;
       this.setCounterText();
       sound.playCarrot(1);
-      if (this.getCarrotCount() === 0) {
-        this.finishGame("YOU WIN!!");
+      if (this.carrotCount === 0) {
+        this.finishGame(Notice.win);
+        this.settingNextLevel();        
         sound.playWin();
       }
     }
-    else if (item === BUG) {
-      this.finishGame("YOU LOST~");
+    else if (item === ItemType.bug) {
+      this.finishGame(Notice.lose);
       sound.playBug();
+      this.settingLevelOne();
       sound.playAlert();
     }
   }
 
   init() {
-    this.gameField.makeElements(CARROT, this.defaultCountCarrot);
-    this.gameField.makeElements(BUG, this.defaultCountBug);
+    this.gameField.makeElements(ItemType.carrot, this.saveCarrotCount);
+    this.gameField.makeElements(ItemType.bug, this.saveBugCount);
 }
 
   setFinishListener(fieldStop) {
@@ -68,7 +108,8 @@ export default class Game {
       this.setTimer(number);
       number--;
       if (number < 0) {      
-        this.finishGame("YOU LOST~");
+        this.finishGame(Notice.lose);
+        this.settingLevelOne();
         sound.playAlert();
       }
     }, 1000);
@@ -108,14 +149,38 @@ export default class Game {
   }
 
   setCounterText() {
-    this.counter.innerText = `${this.countCarrot}`;
+    this.counter.innerText = `${this.carrotCount}`;
   }
 
-  getCarrotCount() {
-    return this.countCarrot;
+  settingNextLevel() {
+    this.gameField.removeImgs();
+    this.settingDefaultCount(2);
+    this.init();
+    this.curLevel += 1;
+    if (this.highestLevel < this.curLevel) {
+      this.highestLevel = this.curLevel;      
+    }
+    this.levelText.innerText = this.highestLevel;
   }
 
-  setCarrotCount(number) {
-    this.countCarrot = number;
+  settingLevelOne() {
+    this.gameField.removeImgs();
+    this.settingDefaultCount(0);
+    this.init();
+    this.curLevel = 1;
+  }
+
+  settingDefaultCount(num) {
+    if (num === 0) {
+      this.saveCarrotCount = this.defaultCarrotCount;
+      this.saveBugCount = this.defaultBugCount;
+      this.carrotCount = this.saveCarrotCount;
+      this.bugCount = this.saveBugCount;
+      return;
+    }
+    this.saveCarrotCount += num;
+    this.saveBugCount += num;
+    this.carrotCount = this.saveCarrotCount;
+    this.bugCount = this.saveBugCount;
   }
 }

@@ -1,7 +1,18 @@
 'use strict';
 const CARROT_SIZE = 80;
 
-export default class Field {
+export const ItemType = Object.freeze({
+  carrot: 'carrot',
+  bug: 'bug',
+})
+
+const ImgSize = Object.freeze({
+  small: 'beSmall',
+  medium: 'beMedium',
+  large: 'beLarge',
+})
+
+export class Field {
   constructor() {
     this.field = document.querySelector('.field');
     this.fieldRect = this.field.getBoundingClientRect();
@@ -35,10 +46,6 @@ export default class Field {
     }
   }
   
-  setOpacity(opacity) {
-    this.field.style.opacity = opacity;
-  }
-
   setClickListener(onItemClick) {
     this.onItemClick = onItemClick;
   }
@@ -46,12 +53,12 @@ export default class Field {
   onClick(event) {
     const target = event.target;
     if (target.matches('.carrot')) {
-      target.style.opacity = 0;
+      target.dataset.size = ImgSize.small;
       target.classList.add('hidden');
-      this.onItemClick && this.onItemClick('carrot');
+      this.onItemClick && this.onItemClick(ItemType.carrot);
     }
     else if (target.matches('.bug')) {
-      this.onItemClick && this.onItemClick('bug');
+      this.onItemClick && this.onItemClick(ItemType.bug);
     }
   }
 
@@ -68,19 +75,36 @@ export default class Field {
     if (!isShow) {
       this.field.classList.remove('show');
       this.imgsArr.forEach(img => {
-      img.classList.add('hidden');
+        img.classList.add('hidden');
       })
       return;
     }
-    this.field.style.opacity = 0;
+    this.field.style.opacity = 1;
+    this.imgsArr.forEach(img => {
+      img.style.opacity = 0;
+      img.dataset.size = ImgSize.small;
+    })
+
     setTimeout(() => {
-      this.field.classList.add('show');
-      this.field.style.opacity = 1;
       this.imgsArr.forEach(img => {
         img.style.opacity = 1;
+        img.dataset.size = ImgSize.large;
+      })
+    }, 700);
+
+    setTimeout(() => {
+      this.field.classList.add('show');      
+      this.imgsArr.forEach(img => {        
         img.classList.remove('hidden');
+        img.dataset.size = ImgSize.medium;
         })
     }, 1000);
     
+  }
+
+  removeImgs() {
+    this.imgsArr.forEach(img => {
+      img.remove();
+    })
   }
 }

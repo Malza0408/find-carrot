@@ -1,6 +1,8 @@
 'use strict';
 import * as sound from './sound.js';
 
+const SHOW = "show";
+
 export default class PopUp {
   constructor() {
     this.popUpMenu = document.querySelector('.popUpMenu');
@@ -12,8 +14,6 @@ export default class PopUp {
       this.hide(false, 0);
       sound.stopWin();
     });
-
-    this.SHOW = "show";
   }
 
   setClickListener(onClick) {
@@ -21,12 +21,19 @@ export default class PopUp {
   };
 
   hide(isShow, opacity) {
-    isShow ? this.popUpMenu.classList.add(this.SHOW) : this.popUpMenu.classList.remove(this.SHOW);
+    isShow ? this.popUpMenu.classList.add(SHOW) : this.popUpMenu.classList.remove(SHOW);
     this.popUpMenu.style.opacity = opacity;
   }
 
-  setState(sentence) {
+  replayState(sentence) {
     this.hide(true, 1);
     this.popUpMenuText.innerText = `${sentence}`;
   }
+
+  winState(notice) {
+    this.hide(true, 1);
+    this.restartBtn.innerHTML = `<i class="fas fa-play"></i>`;
+    this.popUpMenuText.innerText = `${notice}`;
+  }
+  
 }

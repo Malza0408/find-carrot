@@ -32,6 +32,23 @@ button {
   top: 50px;
 }
 
+.game__Level {
+  margin: 0;
+  padding: 2px;
+  position: absolute;
+  width: 30%;
+  height: 10%;
+  left: 4px;
+  top: 4px;
+  font-size: 22px;
+  background-color: var(--color-btn);
+  border-radius: 20px;
+  border: 2px solid var(--color-black);  
+  line-height: 30px;
+  text-align: center;
+  font-weight: 600;
+}
+
 .game__displayContainer {
   display: flex;
   flex-direction: column;
@@ -117,7 +134,20 @@ button {
 
 .field img {
   position: absolute;
-  transition: all 100ms ease-in;
+  transition: all 300ms ease;
+  transform: scale(0);
+}
+
+.field img[data-size="beSmall"] {
+  transform: scale(0);
+}
+
+.field img[data-size="beLarge"] {
+  transform: scale(1.1);
+}
+
+.field img[data-size="beMedium"] {
+  transform: scale(1.0);
 }
 
 .field.show img:hover {
@@ -125,7 +155,7 @@ button {
   transform: scale(1.1);
 }
 
-img.hidden {
+.field img.hidden {
   pointer-events: none;
 }
 
