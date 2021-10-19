@@ -25,9 +25,9 @@ export default class PopUp {
     this.popUpMenu.style.opacity = opacity;
   }
 
-  replayState(sentence) {
+  replayState(notice) {
     this.hide(true, 1);
-    this.popUpMenuText.innerText = `${sentence}`;
+    this.popUpMenuText.innerText = `${notice}`;
   }
 
   winState(notice) {

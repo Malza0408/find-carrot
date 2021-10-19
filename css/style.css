@@ -137,6 +137,7 @@ button {
   position: absolute;
   transition: all 300ms ease;
   transform: scale(0);
+  visibility: hidden;
 }
 
 .field img[data-size="beSmall"] {

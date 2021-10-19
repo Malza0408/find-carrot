@@ -40,7 +40,6 @@ export class Field {
       child.classList.add('hidden');
       child.style.left = `${X}px`;
       child.style.top = `${Y}px`;
-      this.field.style.opacity = 0;
       this.imgsArr.push(child);
       this.field.appendChild(child);
     }
@@ -79,26 +78,25 @@ export class Field {
       })
       return;
     }
-    this.field.style.opacity = 1;
     this.imgsArr.forEach(img => {
-      img.style.opacity = 0;
+      img.style.visibility = 'hidden';
       img.dataset.size = ImgSize.small;
     })
 
     setTimeout(() => {
       this.imgsArr.forEach(img => {
-        img.style.opacity = 1;
+        img.style.visibility = 'visible';
         img.dataset.size = ImgSize.large;
       })
     }, 700);
 
     setTimeout(() => {
       this.field.classList.add('show');      
-      this.imgsArr.forEach(img => {        
+      this.imgsArr.forEach(img => {
         img.classList.remove('hidden');
         img.dataset.size = ImgSize.medium;
         })
-    }, 1000);
+    }, 1020);
     
   }
 

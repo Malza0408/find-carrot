@@ -122,6 +122,7 @@ class Game {
     this.gameField.setFieldShow(true);
     this.gameStart = true;
     this.gameField.rePositionImgs();
+    this.carrotCount = this.saveCarrotCount;
     sound.playBackground();
   }
   
